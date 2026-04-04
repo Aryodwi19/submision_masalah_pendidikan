@@ -42,6 +42,9 @@ joblib
 
 Di dalamnya, pengguna bisa melihat perbandingan jumlah mahasiswa yang lulus, aktif, dan putus kuliah. Selain itu, terdapat grafik yang menunjukkan hubungan antara nilai semester dengan status kelulusan, sehingga mempermudah manajemen dalam memantau tren penurunan performa mahasiswa secara cepat tanpa harus membaca ribuan baris data di Excel.
 
+* Streamlit : https://share.streamlit.io/?utm_source=streamlit&utm_medium=referral&utm_campaign=main&utm_content=-ss-streamlit-io-topright
+* Google looket studio : https://lookerstudio.google.com/reporting/7eead7eb-57b1-44a1-be33-96b14fac7a76 
+
 ## Conclusion
 * Proyek ini menyimpulkan bahwa nasib pendidikan mahasiswa sebenarnya bisa diprediksi lebih awal dengan melihat pola data mereka. Menggunakan model prediksi pintar, kita menemukan bahwa Semester 2 adalah masa paling kritis. Mahasiswa yang gagal menyelesaikan banyak mata kuliah atau mengalami penurunan nilai drastis di semester ini memiliki risiko sangat tinggi untuk dropout.
 
