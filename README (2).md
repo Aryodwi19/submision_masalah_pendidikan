@@ -49,7 +49,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 
 Sebagai bagian dari solusi data analitik, fitur pada dataset asli telah diproses (label decoding) untuk membuat status kategori (seperti Marital_status, Course, Gender) menjadi jauh lebih mudah dibaca oleh non-teknis. Data yang telah diproses ini disimpan ke dalam file data_untuk_looker.csv agar siap digunakan sebagai sumber data di platform intelijen bisnis seperti Looker Studio. Dashboard ini akan berfokus untuk menampilkan gambaran komprehensif terkait retensi mahasiswa, pengaruh beasiswa terhadap angka kelulusan, dan peta performa akademik per kategori mahasiswa. 
 
-* Streamlit : https://submisionmasalahpendidikan-csrnwipusaw7zjm2lgu7wq.streamlit.app/ 
+* Streamlit : https://submisionmasalahpendidikan-x2mvkzkxksy6zhbipdbwm7.streamlit.app/
 * Google looket studio : https://lookerstudio.google.com/reporting/010cdade-193d-42be-8ceb-093e74a7139b 
 
 ## Conclusion
