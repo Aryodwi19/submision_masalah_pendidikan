@@ -1,26 +1,25 @@
 # Proyek Akhir: Menyelesaikan Permasalahan Institusi Pendidikan
-Nama : Aryo Dwi Haryanto
-Email : aryodwi122@gmail.com
-Id dicoding : aryo_dwi_h
+* Nama : Aryo Dwi Haryanto
+* Email : aryodwi122@gmail.com
+* Id dicoding : aryo_dwi_h
+  
 ## Business Understanding
-Setiap kampus pasti ingin mahasiswanya lulus tepat waktu. Sayangnya, banyak mahasiswa yang terpaksa berhenti di tengah jalan (dropout atau putus kuliah). Hal ini tentu merugikan masa depan mahasiswa dan juga nama baik kampus. Melalui proyek ini, kita mencoba mencari tahu apa saja penyebab utama mahasiswa putus kuliah, sehingga kampus bisa memberikan bantuan sebelum semuanya terlambat.
 
+Institusi pendidikan saat ini menghadapi tantangan dalam mempertahankan tingkat retensi mahasiswa. Berdasarkan data yang ada, meskipun mayoritas mahasiswa berhasil lulus (*Graduate* dengan jumlah 2.209), terdapat angka *dropout* yang cukup signifikan, yaitu sebanyak 1.421 mahasiswa (lebih dari setengah jumlah lulusan). Kondisi ini dapat berdampak buruk bagi keberlanjutan akademik dan stabilitas finansial institusi.
 
 ### Permasalahan Bisnis
-
-1. Angka Putus Kuliah Tinggi: Dari sekitar 4.400 data riwayat mahasiswa yang dianalisis, ada lebih dari 1.400 mahasiswa (sekitar 32%) yang berakhir putus kuliah.
-
-2. Terlambat Menyadari: Kampus belum punya cara cepat untuk mendeteksi mahasiswa mana saja yang mulai menunjukkan tanda-tanda akan berhenti kuliah.
-
-3. Bantuan Kurang Tepat Sasaran: Kampus kesulitan menentukan mahasiswa mana yang paling mendesak untuk diberikan pendampingan belajar atau bantuan beasiswa.
+Terdapat beberapa permasalahan bisnis utama yang ingin diselesaikan melalui proyek ini:
+* Bagaimana cara mendeteksi mahasiswa yang memiliki risiko *dropout* secara lebih awal agar institusi dapat melakukan intervensi?
+* Apa saja faktor utama (baik dari segi akademik, sosio-ekonomi, maupun demografi) yang paling berpengaruh terhadap penentuan status akhir seorang mahasiswa (Lulus atau *Dropout*)?
    
 ### Cakupan Proyek
+Proyek ini mencakup beberapa tahapan analisis dan pemodelan data sebagai berikut:
+* **Exploratory Data Analysis (EDA)**: Menganalisis distribusi data target (*Status*), distribusi variabel kategorikal seperti *gender* dan beasiswa, serta distribusi variabel numerikal seperti usia saat mendaftar.
+* **Analisis Korelasi**: Memeriksa hubungan multivariat untuk melihat fitur yang berpengaruh kuat pada prediksi target, seperti korelasi antara nilai semester 1 dan semester 2.
+* **Data Preparation**: Melakukan *label decoding* untuk kebutuhan *dashboard*, menyiapkan subset data untuk pemodelan biner (mengambil kategori *Dropout* dan *Graduate* saja), serta melakukan penskalaan fitur (Standard Scaler).
+* **Pemodelan Machine Learning**: Membangun dan melatih model klasifikasi menggunakan algoritma *Random Forest Classifier* dengan bobot kelas yang seimbang.
+* **Evaluasi & Deployment**: Mengevaluasi kinerja model menggunakan *accuracy*, *classification report* (Precision, Recall, F1-Score), serta *Confusion Matrix*, lalu mengekspor model (`model_rf.pkl`) dan skaler (`scaler.pkl`) agar siap digunakan di sistem *production*.
 
-* Menganalisis Data: Mempelajari data nilai mahasiswa, latar belakang keluarga, hingga kondisi ekonomi mereka untuk mencari pola.
-
-* Membuat Sistem Prediksi: Menggunakan teknologi Machine Learning (komputer yang dilatih untuk belajar dari data masa lalu) agar bisa menebak nasib mahasiswa ke depannya: apakah akan Lulus, Putus Kuliah, atau Masih Berjuang (Aktif).
-
-* Memberikan Solusi: Menyusun saran praktis untuk pihak kampus berdasarkan temuan dari data tersebut.
 ### Persiapan
 
 Sumber data: data.csv
@@ -28,33 +27,45 @@ Dataset yang digunakan adalah data riwayat mahasiswa yang mencakup informasi dem
 
 Setup environment:
 ```
-pip install
-pandas
-numpy
-matplotlib
-seaborn
-scikit-learn
-joblib
+Sumber data: Data dimuat dari file lokal `data.csv` yang dipisahkan oleh tanda titik koma (`;`). Dataset ini terdiri dari 4.424 baris dan 37 kolom, dengan kualitas yang sangat bersih (tidak ada *missing value* maupun duplikasi).
+
+Setup environment:
+
+```python
+# Import library untuk manipulasi data, visualisasi, dan Machine Learning
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import joblib
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
 ```
 
 ## Business Dashboard
 
-Di dalamnya, pengguna bisa melihat perbandingan jumlah mahasiswa yang lulus, aktif, dan putus kuliah. Selain itu, terdapat grafik yang menunjukkan hubungan antara nilai semester dengan status kelulusan, sehingga mempermudah manajemen dalam memantau tren penurunan performa mahasiswa secara cepat tanpa harus membaca ribuan baris data di Excel.
+Sebagai bagian dari solusi data analitik, fitur pada dataset asli telah diproses (label decoding) untuk membuat status kategori (seperti Marital_status, Course, Gender) menjadi jauh lebih mudah dibaca oleh non-teknis. Data yang telah diproses ini disimpan ke dalam file data_untuk_looker.csv agar siap digunakan sebagai sumber data di platform intelijen bisnis seperti Looker Studio. Dashboard ini akan berfokus untuk menampilkan gambaran komprehensif terkait retensi mahasiswa, pengaruh beasiswa terhadap angka kelulusan, dan peta performa akademik per kategori mahasiswa. 
 
 * Streamlit : https://share.streamlit.io/?utm_source=streamlit&utm_medium=referral&utm_campaign=main&utm_content=-ss-streamlit-io-topright
-* Google looket studio : https://lookerstudio.google.com/reporting/7eead7eb-57b1-44a1-be33-96b14fac7a76 
+* Google looket studio : https://lookerstudio.google.com/reporting/010cdade-193d-42be-8ceb-093e74a7139b 
 
 ## Conclusion
-* Proyek ini menyimpulkan bahwa nasib pendidikan mahasiswa sebenarnya bisa diprediksi lebih awal dengan melihat pola data mereka. Menggunakan model prediksi pintar, kita menemukan bahwa Semester 2 adalah masa paling kritis. Mahasiswa yang gagal menyelesaikan banyak mata kuliah atau mengalami penurunan nilai drastis di semester ini memiliki risiko sangat tinggi untuk dropout.
+Berdasarkan analisis dan evaluasi model, dapat disimpulkan bahwa:
 
-* Selain faktor nilai, masalah keuangan (kelancaran pembayaran UKT) juga menjadi faktor penentu apakah seorang mahasiswa akan lanjut kuliah atau berhenti. Dengan tingkat akurasi model sebesar 78%, sistem ini sudah cukup mumpuni untuk membantu kampus membedakan mana mahasiswa yang aman dan mana yang butuh bantuan segera.
+* Model Random Forest yang dibangun mampu mendeteksi status kelulusan (Graduate vs Dropout) dengan akurasi yang sangat baik, yaitu 89.67%.
 
-### Rekomendasi Action Items (Optional)
-* Aktivasi Sistem Peringatan Dini (Early Warning): Menggunakan model ini untuk memberikan notifikasi otomatis kepada dosen pembimbing jika ada mahasiswa yang nilainya anjlok di Semester 2, agar bisa segera diberikan bimbingan konseling.
+* Model ini sangat andal dalam mendeteksi mahasiswa yang akan lulus (Recall 0.97), tetapi masih memiliki sedikit kelemahan dalam mendeteksi total mahasiswa dropout (Recall 0.81), di mana sekitar 19% dari mahasiswa dropout salah terprediksi sebagai mahasiswa lulus.
 
-* Pemantauan Mahasiswa "Abu-Abu": Memberikan perhatian ekstra kepada mahasiswa yang berstatus aktif (Enrolled) namun memiliki progres akademik yang lambat, karena mereka adalah kelompok yang paling rawan berubah status menjadi dropout.
+* Berdasarkan Feature Importance, performa akademik di semester 1 dan semester 2, serta status pembayaran kuliah (Tuition_fees_up_to_date) adalah faktor penentu (prediktor) terkuat atas status seorang mahasiswa dibandingkan faktor eksternal lainnya (seperti pekerjaan orang tua atau kondisi makro ekonomi).
 
-* Evaluasi Bantuan Finansial: Mengingat faktor pembayaran UKT sangat berpengaruh, kampus sebaiknya mempermudah akses beasiswa atau skema cicilan khusus bagi mahasiswa yang terdeteksi berisiko dropout karena alasan ekonomi.
+* Rekomendasi Action Items
+Berdasarkan hasil analisis, berikut adalah beberapa rekomendasi tindakan untuk pihak institusi:
 
-* Pendampingan Akademik Intensif: Membuat program tutorial atau belajar tambahan khusus untuk mata kuliah di semester awal yang memiliki tingkat kegagalan paling tinggi.
+* Lakukan Intervensi Dini: Institusi harus menggunakan model ini untuk mengidentifikasi mahasiswa yang memiliki probabilitas tinggi untuk dropout sejak awal semester berdasarkan nilai akademiknya. Sediakan layanan bimbingan konseling bagi mahasiswa dengan performa awal yang rendah.
+
+* Fokus pada Bantuan Finansial: Mengingat pengaruh besar status pembayaran (Tuition_fees_up_to_date) dan beasiswa, institusi perlu menyediakan fleksibilitas pembayaran atau menambah kuota beasiswa bagi mahasiswa yang berisiko keluar akibat faktor ekonomi.
+
+* Lakukan Penyesuaian Data Model Lanjutan: Untuk meningkatkan sensitivitas terhadap kelompok rentan (Recall Dropout yang masih 81%), tim data perlu menggunakan teknik seperti oversampling (contoh: SMOTE) guna meminimalisir bias yang terjadi akibat ketidakseimbangan data kelas target.
