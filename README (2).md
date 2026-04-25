@@ -64,7 +64,7 @@ Dashboard dapat diakses melalui tautan berikut:Google looker studio : https://lo
 ## Menjalankan Sistem Machine Learning
 Sistem prediksi dibangun menggunakan Streamlit dan dapat dijalankan secara lokal dengan perintah berikut:
 streamlit run app.py
-Aplikasi akan terbuka di browser pada alamat http://localhost:8501.
+Aplikasi akan terbuka di browser pada alamat https://submisionmasalahpendidikan-4rrkx3acmfrjhxjra46dww.streamlit.app/ 
 Pengguna cukup mengisi data akademik dan demografis mahasiswa melalui form yang tersedia, lalu sistem akan memprediksi apakah mahasiswa tersebut berisiko Dropout atau berpotensi Lulus (Graduate) beserta nilai probabilitasnya.
 
 
