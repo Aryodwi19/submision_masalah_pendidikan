@@ -143,7 +143,7 @@ with st.form("prediction_form"):
         cu2_evaluations = st.number_input("Jumlah Evaluasi / Ujian (Sem 2)", 0, 33, 6,
                             help="Jumlah ujian atau evaluasi yang diikuti di semester 2.")
 
-    submit = st.form_submit_button("🔍 Prediksi Status Mahasiswa", width="stretch")
+    submit = st.form_submit_button("🔍 Prediksi Status Mahasiswa", use_container_width=True)
 if submit:
     tuition_val = 1 if "Ya" in tuition_label else 0
 
@@ -218,7 +218,7 @@ if submit:
     summary["Nilai"] = summary["Nilai"].astype(str)
 
     st.dataframe(
-        summary,
-        width="stretch",
-        hide_index=True
-    )
+    summary,
+    use_container_width=True,
+    hide_index=True
+)
