@@ -5,67 +5,106 @@
   
 ## Business Understanding
 
-Institusi pendidikan saat ini menghadapi tantangan dalam mempertahankan tingkat retensi mahasiswa. Berdasarkan data yang ada, meskipun mayoritas mahasiswa berhasil lulus (*Graduate* dengan jumlah 2.209), terdapat angka *dropout* yang cukup signifikan, yaitu sebanyak 1.421 mahasiswa (lebih dari setengah jumlah lulusan). Kondisi ini dapat berdampak buruk bagi keberlanjutan akademik dan stabilitas finansial institusi.
+Institusi pendidikan tinggi menghadapi tantangan serius berupa tingginya angka mahasiswa yang tidak menyelesaikan studi mereka (dropout). Tingginya angka dropout tidak hanya merugikan mahasiswa secara individu, tetapi juga berdampak langsung pada reputasi institusi, akreditasi, dan keberlanjutan pendanaan. Tanpa sistem deteksi dini yang memadai, institusi kesulitan mengidentifikasi mahasiswa berisiko sebelum terlambat untuk melakukan intervensi.
 
 ### Permasalahan Bisnis
-Terdapat beberapa permasalahan bisnis utama yang ingin diselesaikan melalui proyek ini:
-* Bagaimana cara mendeteksi mahasiswa yang memiliki risiko *dropout* secara lebih awal agar institusi dapat melakukan intervensi?
-* Apa saja faktor utama (baik dari segi akademik, sosio-ekonomi, maupun demografi) yang paling berpengaruh terhadap penentuan status akhir seorang mahasiswa (Lulus atau *Dropout*)?
+1. Institusi tidak memiliki sistem yang mampu mendeteksi mahasiswa berisiko dropout sejak dini, sehingga intervensi sering terlambat dilakukan.
+2. Tidak diketahui faktor-faktor utama yang paling berpengaruh terhadap keputusan mahasiswa untuk berhenti kuliah.
+3. Tidak ada alat prediksi berbasis data yang dapat digunakan oleh staf akademik untuk mengambil keputusan secara proaktif.
    
 ### Cakupan Proyek
-Proyek ini mencakup beberapa tahapan analisis dan pemodelan data sebagai berikut:
-* **Exploratory Data Analysis (EDA)**: Menganalisis distribusi data target (*Status*), distribusi variabel kategorikal seperti *gender* dan beasiswa, serta distribusi variabel numerikal seperti usia saat mendaftar.
-* **Analisis Korelasi**: Memeriksa hubungan multivariat untuk melihat fitur yang berpengaruh kuat pada prediksi target, seperti korelasi antara nilai semester 1 dan semester 2.
-* **Data Preparation**: Melakukan *label decoding* untuk kebutuhan *dashboard*, menyiapkan subset data untuk pemodelan biner (mengambil kategori *Dropout* dan *Graduate* saja), serta melakukan penskalaan fitur (Standard Scaler).
-* **Pemodelan Machine Learning**: Membangun dan melatih model klasifikasi menggunakan algoritma *Random Forest Classifier* dengan bobot kelas yang seimbang.
-* **Evaluasi & Deployment**: Mengevaluasi kinerja model menggunakan *accuracy*, *classification report* (Precision, Recall, F1-Score), serta *Confusion Matrix*, lalu mengekspor model (`model_rf.pkl`) dan skaler (`scaler.pkl`) agar siap digunakan di sistem *production*.
+1. Melakukan eksplorasi dan analisis data (EDA) pada dataset mahasiswa untuk menemukan pola dan faktor penyebab dropout.
+2. Membangun dashboard interaktif menggunakan Looker Studio untuk memvisualisasikan temuan analisis data.
+3. Membangun model machine learning (Random Forest Classifier) untuk memprediksi status mahasiswa (Graduate atau Dropout).
+4. Mengembangkan aplikasi prediksi berbasis Streamlit yang dapat digunakan secara langsung oleh staf institusi.
 
 ### Persiapan
 
-Sumber data: data.csv
-Dataset yang digunakan adalah data riwayat mahasiswa yang mencakup informasi demografi, sosial-ekonomi, dan performa akademik (semester 1 dan 2). Data ini diambil dari file data.csv yang diproses menggunakan pemisah (separator) titik koma (;).
+Sumber data: data_student.csv
+Dataset berisi 4.424 data mahasiswa dengan 37 fitur yang mencakup informasi demografis, akademik, dan sosio-ekonomi. Tidak terdapat missing value maupun data duplikat.
 
-Setup environment:
+## Setup environment:
+Persyaratan sistem : 
 ```
-Sumber data: Data dimuat dari file lokal `data.csv` yang dipisahkan oleh tanda titik koma (`;`). Dataset ini terdiri dari 4.424 baris dan 37 kolom, dengan kualitas yang sangat bersih (tidak ada *missing value* maupun duplikasi).
+Python 3.9.x atau lebih baru
+pip 21.x+
 
-Setup environment:
+# 1. Buat virtual environment
+python -m venv venv
 
-```python
-# Import library untuk manipulasi data, visualisasi, dan Machine Learning
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import joblib
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+# 2. Aktifkan virtual environment
+# Windows:
+venv\Scripts\activate
+# macOS / Linux:
+source venv/bin/activate
+
+# 3. Install semua dependensi
+pip install -r requirements.txt
+
+# 4. Latih model (menghasilkan model_rf.pkl dan scaler.pkl)
+python prediction_fix.py
+
+# 5. Jalankan aplikasi Streamlit
+streamlit run app.py
+
+Catatan: Pastikan file data_student.csv, model_rf.pkl, dan scaler.pkl berada di direktori yang sama dengan app.py sebelum menjalankan Streamlit.
 
 ```
 
 ## Business Dashboard
+Dashboard interaktif dibuat menggunakan Looker Studio untuk memvisualisasikan distribusi status mahasiswa, pola dropout berdasarkan faktor akademik dan demografis, serta perbandingan antar kelompok mahasiswa.
+Dashboard dapat diakses melalui tautan berikut:Google looker studio : https://lookerstudio.google.com/reporting/010cdade-193d-42be-8ceb-093e74a7139b atau https://datastudio.google.com/s/r4i4FHdzkH4  
+## Insight utama dari dashboard:
+* Mahasiswa dengan status Graduate mendominasi dataset (2.209 mahasiswa), diikuti Dropout (1.421) dan Enrolled (794).
+* Mahasiswa yang tidak membayar biaya kuliah tepat waktu memiliki tingkat dropout yang jauh lebih tinggi.
+* Perempuan memiliki tingkat kelulusan lebih baik dibandingkan laki-laki; laki-laki menunjukkan risiko dropout yang lebih tinggi.
+* Mahasiswa penerima beasiswa memiliki angka dropout yang jauh lebih rendah, menunjukkan dukungan finansial berperan sebagai faktor protektif.
+* Mahasiswa yang mendaftar pada usia lebih tua cenderung memiliki risiko dropout lebih tinggi.
 
-Sebagai bagian dari solusi data analitik, fitur pada dataset asli telah diproses (label decoding) untuk membuat status kategori (seperti Marital_status, Course, Gender) menjadi jauh lebih mudah dibaca oleh non-teknis. Data yang telah diproses ini disimpan ke dalam file data_untuk_looker.csv agar siap digunakan sebagai sumber data di platform intelijen bisnis seperti Looker Studio. Dashboard ini akan berfokus untuk menampilkan gambaran komprehensif terkait retensi mahasiswa, pengaruh beasiswa terhadap angka kelulusan, dan peta performa akademik per kategori mahasiswa. 
+## Menjalankan Sistem Machine Learning
+Sistem prediksi dibangun menggunakan Streamlit dan dapat dijalankan secara lokal dengan perintah berikut:
+streamlit run app.py
+Aplikasi akan terbuka di browser pada alamat http://localhost:8501.
+Pengguna cukup mengisi data akademik dan demografis mahasiswa melalui form yang tersedia, lalu sistem akan memprediksi apakah mahasiswa tersebut berisiko Dropout atau berpotensi Lulus (Graduate) beserta nilai probabilitasnya.
 
-* Streamlit : https://submisionmasalahpendidikan-x2mvkzkxksy6zhbipdbwm7.streamlit.app/
-* Google looket studio : https://lookerstudio.google.com/reporting/010cdade-193d-42be-8ceb-093e74a7139b 
 
 ## Conclusion
-Berdasarkan analisis dan evaluasi model, dapat disimpulkan bahwa:
+## 1. Kesimpulan Analisis Data (EDA & Dashboard)
+Berdasarkan hasil eksplorasi data dan visualisasi dashboard, ditemukan faktor-faktor utama yang berkaitan erat dengan kejadian dropout:
+* Performa Akademik Semester Awal adalah prediktor terkuat. Mahasiswa dengan status Dropout memiliki median nilai semester 1 paling rendah dengan rentang yang sangat lebar, bahkan banyak yang mendapat nilai 0. Kegagalan akademik di awal kuliah merupakan sinyal peringatan terbesar.
+* Kondisi Finansial menjadi faktor kritis. Mahasiswa yang tidak membayar biaya kuliah tepat waktu dan yang berstatus debitur memiliki probabilitas dropout yang jauh lebih tinggi.
+* Beasiswa terbukti menjadi faktor protektif. Mahasiswa penerima beasiswa memiliki angka dropout yang jauh lebih rendah.
+* Gender berpengaruh terhadap risiko. Mahasiswa laki-laki menunjukkan angka dropout yang lebih tinggi dibandingkan perempuan.
+* Usia saat Pendaftaran juga berperan. Mayoritas mahasiswa yang mendaftar pada usia 18–22 tahun memiliki tingkat kelulusan lebih baik. Pendaftar yang lebih tua cenderung memiliki risiko dropout lebih tinggi.
 
-* Model Random Forest yang dibangun mampu mendeteksi status kelulusan (Graduate vs Dropout) dengan akurasi yang sangat baik, yaitu 89.67%.
+## 2. Performa Model Machine Learning
+Model Random Forest Classifier dilatih menggunakan 15 fitur terpilih berdasarkan feature importance dengan hasil evaluasi sebagai berikut:
+Hasil evaluasi menunjukkan performa yang sangat baik dengan akurasi keseluruhan sebesar 92,56%. Pada kelas Graduate, model memperoleh precision 0,92, recall 0,96, dan F1-score 0,94. Sementara itu, pada kelas Dropout, model mencatat precision 0,94, recall 0,87, dan F1-score 0,90. Hasil ini menunjukkan bahwa model mampu mengklasifikasikan data dengan tingkat ketepatan dan konsistensi yang tinggi.
 
-* Model ini sangat andal dalam mendeteksi mahasiswa yang akan lulus (Recall 0.97), tetapi masih memiliki sedikit kelemahan dalam mendeteksi total mahasiswa dropout (Recall 0.81), di mana sekitar 19% dari mahasiswa dropout salah terprediksi sebagai mahasiswa lulus.
 
-* Berdasarkan Feature Importance, performa akademik di semester 1 dan semester 2, serta status pembayaran kuliah (Tuition_fees_up_to_date) adalah faktor penentu (prediktor) terkuat atas status seorang mahasiswa dibandingkan faktor eksternal lainnya (seperti pekerjaan orang tua atau kondisi makro ekonomi).
 
-* Rekomendasi Action Items
-Berdasarkan hasil analisis, berikut adalah beberapa rekomendasi tindakan untuk pihak institusi:
+15 Fitur Terpenting yang Digunakan Model:
+1. NoFiturKeterangan1Curricular_units_2nd_sem_approved : Jumlah MK lulus semester 2
+2. Curricular_units_1st_sem_approved : Jumlah MK lulus semester 1
+3. Curricular_units_2nd_sem_gradeNilai : rata-rata semester 2
+4. Curricular_units_1st_sem_gradeNilai : rata-rata semester 1
+5. Tuition_fees_up_to_date : Status pembayaran biaya kuliah
+6. Admission_grade : Nilai masuk perguruan tinggi
+7. Age_at_enrollment : Usia saat mendaftar
+8. Course : Program studi
+9. Previous_qualification_grade : Nilai kualifikasi sebelumnya
+10. Curricular_units_2nd_sem_evaluations : Jumlah evaluasi semester 2
+11. Curricular_units_1st_sem_evaluations : Jumlah evaluasi semester 1
+12. Fathers_occupation : Pekerjaan ayah
+13. Scholarship_holder : Status penerima beasiswa
+14. Gender : Jenis kelamin
+15. Debtor : Status debitur / tunggakan
 
-* Lakukan Intervensi Dini: Institusi harus menggunakan model ini untuk mengidentifikasi mahasiswa yang memiliki probabilitas tinggi untuk dropout sejak awal semester berdasarkan nilai akademiknya. Sediakan layanan bimbingan konseling bagi mahasiswa dengan performa awal yang rendah.
+Interpretasi: Model sangat handal mendeteksi mahasiswa yang akan lulus (Recall Graduate = 96%). Sekitar 13% mahasiswa yang sebenarnya dropout diprediksi sebagai lulus (False Negative) kelompok ini adalah "silent dropout" yang perlu mendapat perhatian ekstra dari institusi.
 
-* Fokus pada Bantuan Finansial: Mengingat pengaruh besar status pembayaran (Tuition_fees_up_to_date) dan beasiswa, institusi perlu menyediakan fleksibilitas pembayaran atau menambah kuota beasiswa bagi mahasiswa yang berisiko keluar akibat faktor ekonomi.
-
-* Lakukan Penyesuaian Data Model Lanjutan: Untuk meningkatkan sensitivitas terhadap kelompok rentan (Recall Dropout yang masih 81%), tim data perlu menggunakan teknik seperti oversampling (contoh: SMOTE) guna meminimalisir bias yang terjadi akibat ketidakseimbangan data kelas target.
+## Rekomendasi Action Items
+* Lakukan screening berbasis model setiap awal semester. Gunakan sistem prediksi ini untuk mengidentifikasi mahasiswa berisiko sejak semester 1, sebelum performa mereka menurun lebih jauh.
+* Prioritaskan intervensi akademik. Mahasiswa dengan jumlah mata kuliah lulus semester 1 yang rendah harus segera diberikan pendampingan akademik atau program remedial.
+* Perkuat program beasiswa dan bantuan finansial. Mengingat Tuition_fees_up_to_date dan Debtor menjadi faktor kunci, institusi perlu memperluas akses beasiswa dan program cicilan biaya kuliah untuk menekan risiko dropout akibat tekanan finansial.
+* Buat program khusus untuk mahasiswa laki-laki dan mahasiswa usia dewasa. Kedua kelompok ini menunjukkan risiko dropout lebih tinggi dan membutuhkan pendekatan dukungan yang berbeda.
+* Integrasikan dashboard dengan sistem akademik. Looker Studio dapat dikoneksikan dengan data real-time sistem akademik agar pemantauan dilakukan secara berkelanjutan, bukan hanya periodik.
